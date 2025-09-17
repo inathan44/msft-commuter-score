@@ -2,7 +2,7 @@
 
 import { tileOptions } from '@/app/helpers/mapOptions';
 import { addRadius } from '@/app/helpers/radiusHelpers';
-import { addRoute, addRouteMarker } from '@/app/helpers/routeHelpers';
+import { addRoute } from '@/app/helpers/routeHelpers';
 import { addPinDirect } from '@/app/helpers/pinHelpers';
 
 import { useEffect, useRef } from 'react';
@@ -58,13 +58,6 @@ export default function Map({
     if (mapData.routes && mapData.routes.length > 0) {
       mapData.routes.forEach((route) => {
         addRoute(route, map);
-      });
-    }
-
-    // Render route markers using helper
-    if (mapData.routeMarkers && mapData.routeMarkers.length > 0) {
-      mapData.routeMarkers.forEach((marker) => {
-        addRouteMarker(marker, map);
       });
     }
 

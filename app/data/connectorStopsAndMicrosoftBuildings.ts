@@ -1,6 +1,6 @@
-import { ConnectorStopPin, MapPin, MicrosoftBuildingPin } from '@/types/map';
+import { ConnectorStopPin, MicrosoftBuildingPin } from '@/types/map';
 
-const connectorStops: ConnectorStopPin[] = [
+export const connectorStops: ConnectorStopPin[] = [
   {
     id: '14c29b7e-c5f1-4ced-a842-5fdce20ca063',
     coordinates: [-122.320359, 47.626564],
@@ -1186,7 +1186,7 @@ const connectorStops: ConnectorStopPin[] = [
   },
 ];
 
-const microsoftBuildings: MicrosoftBuildingPin[] = [
+export const microsoftBuildings: MicrosoftBuildingPin[] = [
   {
     id: 'dab4483a-f84c-4ddc-9ae6-8fe3b2915d6a',
     coordinates: [-122.10738, 47.673066],

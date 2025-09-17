@@ -1,4 +1,4 @@
-const connectorRadii = [
+export const connectorRadii = [
   {
     id: '26375',
     name: '10TH AVE E & E ALOHA ST, Seattle, WA, 98102',
