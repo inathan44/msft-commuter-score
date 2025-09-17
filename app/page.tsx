@@ -8,7 +8,7 @@ export default function Home() {
 
       <div className='text-center'>
         <Button asChild size='lg'>
-          <Link href='/example'>View Example</Link>
+          <Link href='/form-test'>View Example</Link>
         </Button>
       </div>
     </div>
