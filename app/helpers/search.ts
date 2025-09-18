@@ -255,9 +255,31 @@ export function search(query: Partial<FormInputType>): MapData {
   // Remove duplicate pins (e.g., if building was added multiple times for different transport modes)
   const uniquePins = allPins.filter((pin, index, self) => index === self.findIndex((p) => p.id === pin.id));
 
+  // Sort radii so larger ranges appear under smaller ones (larger ranges first = rendered first = underneath)
+  const sortedRadii = allRadii.sort((a, b) => {
+    // Define transport mode hierarchy - larger ranges get lower priority numbers (rendered first)
+    const getTransportPriority = (mode: string): number => {
+      switch (mode.toLowerCase()) {
+        case 'drive':
+        case 'driving':
+          return 1; // Largest range, rendered first (underneath)
+        case 'cycle':
+        case 'cycling':
+          return 2; // Medium range
+        case 'walk':
+        case 'walking':
+          return 3; // Smallest range, rendered last (on top)
+        default:
+          return 4; // Connector or other modes on top
+      }
+    };
+
+    return getTransportPriority(a.transportMode) - getTransportPriority(b.transportMode);
+  });
+
   return {
     pins: uniquePins,
     routes: [],
-    radii: allRadii,
+    radii: sortedRadii,
   };
 }

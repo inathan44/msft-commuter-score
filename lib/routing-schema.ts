@@ -69,8 +69,8 @@ export interface RoutingMapData {
 
 // Color scheme for different transport modes
 export const transportModeColors: Record<TransportMode, string> = {
-  drive: '#3b82f6', // blue
-  transit: '#10b981', // green
+  drive: '#10b981', // green
+  transit: '#3b82f6', // blue
   walk: '#8b5cf6', // purple
   bike: '#f59e0b', // amber
   truck: '#ef4444', // red

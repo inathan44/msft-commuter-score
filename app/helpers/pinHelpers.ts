@@ -1,5 +1,6 @@
 import L from 'leaflet';
 import { MapPin } from '@/types/map';
+import { getStopScheduleSummary, formatDepartureTime } from './routeHelpers';
 
 export const addPin = (pin: MapPin, map: L.Map) => {
   const [lng, lat] = pin.coordinates;
@@ -115,10 +116,88 @@ export const createPinPopupContent = (pin: MapPin): string => {
     case 'connectorStop':
       const parkingStatus = pin.hasParking ? '✅ Available' : '❌ None';
 
+      // Get schedule information for this connector stop
+      let scheduleInfo = '';
+      try {
+        const schedule = getStopScheduleSummary(pin.id);
+
+        if (schedule.routeCount > 0) {
+          scheduleInfo = `
+            <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #e5e7eb;">
+              <p style="margin: 4px 0; font-weight: bold; color: #3B82F6;">📅 Schedule Information</p>
+              <p style="margin: 4px 0; font-size: 12px;"><strong>Routes:</strong> ${schedule.routeCount} route${
+            schedule.routeCount > 1 ? 's' : ''
+          }</p>
+              <p style="margin: 4px 0; font-size: 12px;">${schedule.routeNames
+                .map((name) => `• ${name}`)
+                .join('<br/>')}</p>
+              
+              ${
+                schedule.nextDeparture
+                  ? `
+                <div style="margin-top: 6px; padding: 4px 8px; background-color: #eff6ff; border-radius: 4px; border-left: 3px solid #3B82F6;">
+                  <p style="margin: 0; font-size: 12px; font-weight: bold;">Next Departure:</p>
+                  <p style="margin: 2px 0 0 0; font-size: 11px;">${schedule.nextDeparture.routeName}</p>
+                  <p style="margin: 2px 0 0 0; font-size: 11px; color: #3B82F6;">${formatDepartureTime(
+                    schedule.nextDeparture.departureTime
+                  )}</p>
+                </div>
+              `
+                  : `
+                <p style="margin: 4px 0; font-size: 12px; color: #666;">No upcoming departures today</p>
+              `
+              }
+              
+              ${
+                schedule.upcomingDepartures.length > 1
+                  ? `
+                <details style="margin-top: 6px; font-size: 12px;">
+                  <summary style="cursor: pointer; color: #3B82F6;">View more departures</summary>
+                  <div style="margin-top: 4px;">
+                    ${schedule.upcomingDepartures
+                      .slice(1)
+                      .map(
+                        (dep) => `
+                      <p style="margin: 2px 0; font-size: 11px;">
+                        ${dep.routeName} - ${formatDepartureTime(dep.departureTime)}
+                      </p>
+                    `
+                      )
+                      .join('')}
+                  </div>
+                </details>
+              `
+                  : ''
+              }
+            </div>
+          `;
+        } else {
+          scheduleInfo = `
+            <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #e5e7eb;">
+              <p style="margin: 4px 0; font-size: 12px; color: #666;">No schedule data available</p>
+            </div>
+          `;
+        }
+      } catch (error) {
+        console.warn('Error fetching schedule for stop:', pin.id, error);
+        scheduleInfo = '';
+      }
+
       specificInfo = `
         <p style="margin: 4px 0;"><strong>Type:</strong> Connector Stop</p>
         <p style="margin: 4px 0;"><strong>Description:</strong> ${pin.description}</p>
         <p style="margin: 4px 0;"><strong>Parking:</strong> ${parkingStatus}</p>
+        ${
+          pin.commuteTimeToOfficeMinutes
+            ? `
+          <div style="margin-top: 6px; padding: 4px 8px; background-color: #f0f9ff; border-radius: 4px; border-left: 3px solid #0ea5e9;">
+            <p style="margin: 0; font-size: 12px; font-weight: bold; color: #0ea5e9;">🏢 Commute to Office</p>
+            <p style="margin: 2px 0 0 0; font-size: 12px; color: #0369a1;">${pin.commuteTimeToOfficeMinutes} minutes via Microsoft Connector</p>
+          </div>
+        `
+            : ''
+        }
+        ${scheduleInfo}
       `;
       break;
     case 'microsoftBuilding':

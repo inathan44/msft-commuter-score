@@ -28,7 +28,7 @@ export function AddressAutocomplete({
   onSelect,
   placeholder = 'Enter an address...',
   label,
-  debounceMs = 750,
+  debounceMs = 500,
 }: AddressAutocompleteProps) {
   const [suggestions, setSuggestions] = useState<AutocompleteResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);

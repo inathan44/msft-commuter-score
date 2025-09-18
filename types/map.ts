@@ -82,6 +82,34 @@ export interface MapData {
   radii: MapRadius[];
 }
 
+// Route Schedule Types
+export interface RouteSchedule {
+  arrivalTime: string; // ISO 8601 datetime string
+  departureTime: string; // ISO 8601 datetime string
+  isPickUp: boolean;
+  isDropOff: boolean;
+  stopId: string;
+  name: string;
+}
+
+export interface RouteTrip {
+  id: string;
+  routeSchedules: RouteSchedule[];
+}
+
+export interface RouteStop {
+  stopId: string;
+  name: string;
+}
+
+export interface ConnectorRoute {
+  routeId: string;
+  routeName: string;
+  date: string; // Date string in YYYY-MM-DD format
+  orderedStops: RouteStop[];
+  trips: RouteTrip[];
+}
+
 // Type for driving radius data
 // interface DriveRadiusData {
 //   id: number;

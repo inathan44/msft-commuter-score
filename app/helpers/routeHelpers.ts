@@ -1,6 +1,7 @@
 import L from 'leaflet';
 import { GeoJsonObject } from 'geojson';
-import { MapRoute, RouteMarker } from '@/types/map';
+import { MapRoute, RouteMarker, ConnectorRoute, RouteSchedule } from '@/types/map';
+import { allRoutes } from '@/app/data/allRoutes';
 
 const createCustomIcon = (color: string, emoji: string) => {
   return L.divIcon({
@@ -90,3 +91,137 @@ export const addRouteMarker = (marker: RouteMarker, map: L.Map) => {
     leafletMarker.openPopup();
   }
 };
+
+// ============================================================================
+// Schedule Helper Functions
+// ============================================================================
+
+/**
+ * Get all available connector routes
+ */
+export function getAllConnectorRoutes(): ConnectorRoute[] {
+  return allRoutes;
+}
+
+/**
+ * Find routes that serve a specific connector stop
+ * @param stopId The connector stop ID to search for
+ * @returns Array of routes that include this stop
+ */
+export function getRoutesForStop(stopId: string): ConnectorRoute[] {
+  return allRoutes.filter((route) => route.orderedStops.some((stop) => stop.stopId === stopId));
+}
+
+/**
+ * Find routes that serve multiple connector stops (for area coverage)
+ * @param stopIds Array of connector stop IDs
+ * @returns Array of routes that serve any of the provided stops
+ */
+export function getRoutesForStops(stopIds: string[]): ConnectorRoute[] {
+  const uniqueRoutes = new Map<string, ConnectorRoute>();
+
+  allRoutes.forEach((route) => {
+    const hasMatchingStop = route.orderedStops.some((stop) => stopIds.includes(stop.stopId));
+
+    if (hasMatchingStop) {
+      uniqueRoutes.set(route.routeId, route);
+    }
+  });
+
+  return Array.from(uniqueRoutes.values());
+}
+
+/**
+ * Get next departure times for a specific stop
+ * @param stopId The connector stop ID
+ * @param currentTime Current time as ISO string (defaults to now)
+ * @param maxResults Maximum number of upcoming departures to return
+ * @returns Array of upcoming departure schedules
+ */
+export function getNextDepartures(
+  stopId: string,
+  currentTime?: string,
+  maxResults: number = 5
+): Array<RouteSchedule & { routeName: string; routeId: string }> {
+  const now = currentTime ? new Date(currentTime) : new Date();
+  const upcomingDepartures: Array<RouteSchedule & { routeName: string; routeId: string }> = [];
+
+  // Find all routes that serve this stop
+  const relevantRoutes = getRoutesForStop(stopId);
+
+  relevantRoutes.forEach((route) => {
+    route.trips.forEach((trip) => {
+      trip.routeSchedules.forEach((schedule) => {
+        if (schedule.stopId === stopId && schedule.isPickUp) {
+          const departureTime = new Date(schedule.departureTime);
+
+          // Only include future departures
+          if (departureTime > now) {
+            upcomingDepartures.push({
+              ...schedule,
+              routeName: route.routeName,
+              routeId: route.routeId,
+            });
+          }
+        }
+      });
+    });
+  });
+
+  // Sort by departure time and limit results
+  return upcomingDepartures
+    .sort((a, b) => new Date(a.departureTime).getTime() - new Date(b.departureTime).getTime())
+    .slice(0, maxResults);
+}
+
+/**
+ * Get schedule summary for a connector stop
+ * @param stopId The connector stop ID
+ * @param currentTime Current time as ISO string (defaults to now)
+ * @returns Summary of schedule information for the stop
+ */
+export function getStopScheduleSummary(
+  stopId: string,
+  currentTime?: string
+): {
+  stopId: string;
+  routeCount: number;
+  nextDeparture: (RouteSchedule & { routeName: string; routeId: string }) | null;
+  upcomingDepartures: Array<RouteSchedule & { routeName: string; routeId: string }>;
+  routeNames: string[];
+} {
+  const routes = getRoutesForStop(stopId);
+  const upcomingDepartures = getNextDepartures(stopId, currentTime, 3);
+
+  return {
+    stopId,
+    routeCount: routes.length,
+    nextDeparture: upcomingDepartures.length > 0 ? upcomingDepartures[0] : null,
+    upcomingDepartures,
+    routeNames: routes.map((route) => route.routeName),
+  };
+}
+
+/**
+ * Format departure time for display
+ * @param departureTime ISO datetime string
+ * @param currentTime Current time as ISO string (defaults to now)
+ * @returns Formatted time string (e.g., "in 15 min" or "2:30 PM")
+ */
+export function formatDepartureTime(departureTime: string, currentTime?: string): string {
+  const departure = new Date(departureTime);
+  const now = currentTime ? new Date(currentTime) : new Date();
+  const diffMinutes = Math.round((departure.getTime() - now.getTime()) / (1000 * 60));
+
+  if (diffMinutes < 0) {
+    return 'Departed';
+  } else if (diffMinutes < 60) {
+    return `in ${diffMinutes} min`;
+  } else {
+    return departure.toLocaleTimeString([], {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+    });
+  }
+}

@@ -7,17 +7,17 @@ export const addRadius = (radius: MapRadius, map: L.Map) => {
   let color: string;
 
   if (radius.type === 'connectorStopRadius') {
-    color = '#06b6d4'; // Teal for connector stops
+    color = '#3b82f6'; // Blue for connector stops
   } else {
     // For otherRadius type, use transport mode to determine color
     switch (radius.transportMode.toLowerCase()) {
       case 'drive':
       case 'driving':
-        color = '#3b82f6'; // Blue for driving
+        color = '#10b981'; // Green for driving
         break;
       case 'cycle':
       case 'cycling':
-        color = '#10b981'; // Green for cycling
+        color = '#f59e0b'; // Amber for cycling
         break;
       case 'walk':
       case 'walking':
@@ -28,14 +28,17 @@ export const addRadius = (radius: MapRadius, map: L.Map) => {
     }
   }
 
-  L.geoJSON(radius.geometry as GeoJsonObject, {
+  // Create the GeoJSON layer with appropriate styling
+  const geoJsonLayer = L.geoJSON(radius.geometry as GeoJsonObject, {
     style: {
       color,
       fillColor: color,
       fillOpacity: 0.33,
       weight: 2,
     },
-  }).addTo(map).bindPopup(`
+  });
+
+  geoJsonLayer.addTo(map).bindPopup(`
       <div>
         <strong>${radius.address}</strong><br/>
         <em>${radius.travelTimeMinutes} minute ${radius.transportMode} radius</em><br/>
