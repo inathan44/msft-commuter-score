@@ -14,8 +14,8 @@ export default function HomePage() {
             <h1 className='text-5xl font-bold text-gray-900'>Microsoft Commute Score</h1>
           </div>
           <p className='text-xl text-gray-600 max-w-3xl mx-auto mb-8'>
-            Explore neighborhoods and discover the perfect location for your home with comprehensive transportation analysis. 
-            Visualize commute options, find nearby amenities, and make data-driven housing decisions.
+            Explore neighborhoods and discover the perfect location for your home with comprehensive transportation
+            analysis. Visualize commute options, find nearby amenities, and make data-driven housing decisions.
           </p>
           <div className='flex flex-col sm:flex-row gap-4 justify-center'>
             <Button asChild size='lg' className='text-lg px-8 py-6'>
@@ -152,7 +152,9 @@ export default function HomePage() {
                 <CheckCircle className='h-6 w-6 text-green-500 mr-3 mt-1' />
                 <div>
                   <h3 className='font-semibold mb-1'>Visual Area Discovery</h3>
-                  <p className='text-gray-600'>Interactive maps showing transportation zones and commute radius areas</p>
+                  <p className='text-gray-600'>
+                    Interactive maps showing transportation zones and commute radius areas
+                  </p>
                 </div>
               </div>
               <div className='flex items-start'>
@@ -175,21 +177,27 @@ export default function HomePage() {
                 <CheckCircle className='h-6 w-6 text-green-500 mr-3 mt-1' />
                 <div>
                   <h3 className='font-semibold mb-1'>Comprehensive Coverage</h3>
-                  <p className='text-gray-600'>Explore entire regions and discover new neighborhoods within your commute preferences</p>
+                  <p className='text-gray-600'>
+                    Explore entire regions and discover new neighborhoods within your commute preferences
+                  </p>
                 </div>
               </div>
               <div className='flex items-start'>
                 <CheckCircle className='h-6 w-6 text-green-500 mr-3 mt-1' />
                 <div>
                   <h3 className='font-semibold mb-1'>Microsoft-Optimized</h3>
-                  <p className='text-gray-600'>Built specifically for Microsoft employees with accurate campus and shuttle data</p>
+                  <p className='text-gray-600'>
+                    Built specifically for Microsoft employees with accurate campus and shuttle data
+                  </p>
                 </div>
               </div>
               <div className='flex items-start'>
                 <CheckCircle className='h-6 w-6 text-green-500 mr-3 mt-1' />
                 <div>
                   <h3 className='font-semibold mb-1'>Smart Filtering</h3>
-                  <p className='text-gray-600'>Set your preferences and see only areas that match your commute requirements</p>
+                  <p className='text-gray-600'>
+                    Set your preferences and see only areas that match your commute requirements
+                  </p>
                 </div>
               </div>
             </div>
@@ -199,7 +207,9 @@ export default function HomePage() {
         {/* CTA Section */}
         <div className='text-center'>
           <h2 className='text-3xl font-bold text-gray-900 mb-4'>Ready to Discover Your Ideal Location?</h2>
-          <p className='text-xl text-gray-600 mb-8'>Start exploring neighborhoods and transportation options in under 30 seconds</p>
+          <p className='text-xl text-gray-600 mb-8'>
+            Start exploring neighborhoods and transportation options in under 30 seconds
+          </p>
           <Button asChild size='lg' className='text-lg px-8 py-6'>
             <Link href='/area-explorer' className='flex items-center'>
               <MapPin className='mr-2 h-5 w-5' />
