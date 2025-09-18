@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Home, MapPin, Route, BarChart3, Clock, Car, Bike, Train, ArrowRight, CheckCircle } from 'lucide-react';
+import { Home, MapPin, Route, BarChart3, Car, Bike, Train, ArrowRight, CheckCircle } from 'lucide-react';
 
 export default function HomePage() {
   return (
@@ -14,21 +14,21 @@ export default function HomePage() {
             <h1 className='text-5xl font-bold text-gray-900'>Microsoft Commute Score</h1>
           </div>
           <p className='text-xl text-gray-600 max-w-3xl mx-auto mb-8'>
-            Find your perfect home location with intelligent commute analysis to Microsoft offices. Get personalized
-            scores based on travel time, distance, and transport options.
+            Explore neighborhoods and discover the perfect location for your home with comprehensive transportation analysis. 
+            Visualize commute options, find nearby amenities, and make data-driven housing decisions.
           </p>
           <div className='flex flex-col sm:flex-row gap-4 justify-center'>
             <Button asChild size='lg' className='text-lg px-8 py-6'>
-              <Link href='/commute-score' className='flex items-center'>
-                <BarChart3 className='mr-2 h-5 w-5' />
-                Analyze Your Commute
+              <Link href='/area-explorer' className='flex items-center'>
+                <MapPin className='mr-2 h-5 w-5' />
+                Explore Areas
                 <ArrowRight className='ml-2 h-5 w-5' />
               </Link>
             </Button>
             <Button asChild variant='outline' size='lg' className='text-lg px-8 py-6'>
-              <Link href='/area-explorer' className='flex items-center'>
-                <MapPin className='mr-2 h-5 w-5' />
-                Explore Areas
+              <Link href='/commute-score' className='flex items-center'>
+                <BarChart3 className='mr-2 h-5 w-5' />
+                Analyze Your Commute
               </Link>
             </Button>
           </div>
@@ -90,27 +90,27 @@ export default function HomePage() {
               <div className='bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4'>
                 <span className='text-2xl font-bold text-blue-600'>1</span>
               </div>
-              <h3 className='text-xl font-semibold mb-3'>Enter Your Address</h3>
+              <h3 className='text-xl font-semibold mb-3'>Choose Your Transport</h3>
               <p className='text-gray-600'>
-                Input your home address or potential location you&apos;re considering for your residence.
+                Select your preferred transportation methods - driving, biking, walking, or Microsoft Connector shuttle.
               </p>
             </div>
             <div className='text-center'>
               <div className='bg-green-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4'>
                 <span className='text-2xl font-bold text-green-600'>2</span>
               </div>
-              <h3 className='text-xl font-semibold mb-3'>Select Microsoft Office</h3>
+              <h3 className='text-xl font-semibold mb-3'>Set Your Preferences</h3>
               <p className='text-gray-600'>
-                Choose your target Microsoft office from our comprehensive list of locations.
+                Define your maximum commute time and select your target Microsoft office location.
               </p>
             </div>
             <div className='text-center'>
               <div className='bg-purple-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4'>
                 <span className='text-2xl font-bold text-purple-600'>3</span>
               </div>
-              <h3 className='text-xl font-semibold mb-3'>Get Your Score</h3>
+              <h3 className='text-xl font-semibold mb-3'>Explore & Discover</h3>
               <p className='text-gray-600'>
-                Receive detailed commute analysis with scores, routes, and recommendations.
+                View interactive maps with commute zones, transportation options, and schedules for informed decisions.
               </p>
             </div>
           </div>
@@ -145,28 +145,28 @@ export default function HomePage() {
 
         {/* Benefits Section */}
         <div className='bg-white rounded-lg shadow-lg p-8 mb-16'>
-          <h2 className='text-3xl font-bold text-center text-gray-900 mb-8'>Why Use Commute Score?</h2>
+          <h2 className='text-3xl font-bold text-center text-gray-900 mb-8'>Why Use Area Explorer?</h2>
           <div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
             <div className='space-y-4'>
               <div className='flex items-start'>
                 <CheckCircle className='h-6 w-6 text-green-500 mr-3 mt-1' />
                 <div>
-                  <h3 className='font-semibold mb-1'>Save Time & Money</h3>
-                  <p className='text-gray-600'>Make informed decisions about housing based on actual commute data</p>
+                  <h3 className='font-semibold mb-1'>Visual Area Discovery</h3>
+                  <p className='text-gray-600'>Interactive maps showing transportation zones and commute radius areas</p>
                 </div>
               </div>
               <div className='flex items-start'>
                 <CheckCircle className='h-6 w-6 text-green-500 mr-3 mt-1' />
                 <div>
-                  <h3 className='font-semibold mb-1'>Data-Driven Decisions</h3>
-                  <p className='text-gray-600'>Objective scoring based on real routing algorithms and travel times</p>
+                  <h3 className='font-semibold mb-1'>Real-Time Schedules</h3>
+                  <p className='text-gray-600'>Live Microsoft Connector shuttle schedules and departure times</p>
                 </div>
               </div>
               <div className='flex items-start'>
                 <CheckCircle className='h-6 w-6 text-green-500 mr-3 mt-1' />
                 <div>
-                  <h3 className='font-semibold mb-1'>Multiple Scenarios</h3>
-                  <p className='text-gray-600'>Compare different transport modes and see all options at once</p>
+                  <h3 className='font-semibold mb-1'>Multiple Transport Options</h3>
+                  <p className='text-gray-600'>Compare driving, biking, walking, and shuttle options in one view</p>
                 </div>
               </div>
             </div>
@@ -174,22 +174,22 @@ export default function HomePage() {
               <div className='flex items-start'>
                 <CheckCircle className='h-6 w-6 text-green-500 mr-3 mt-1' />
                 <div>
-                  <h3 className='font-semibold mb-1'>Visual Mapping</h3>
-                  <p className='text-gray-600'>Interactive maps showing all route options with color-coded paths</p>
+                  <h3 className='font-semibold mb-1'>Comprehensive Coverage</h3>
+                  <p className='text-gray-600'>Explore entire regions and discover new neighborhoods within your commute preferences</p>
                 </div>
               </div>
               <div className='flex items-start'>
                 <CheckCircle className='h-6 w-6 text-green-500 mr-3 mt-1' />
                 <div>
-                  <h3 className='font-semibold mb-1'>Microsoft-Specific</h3>
-                  <p className='text-gray-600'>Tailored for Microsoft employees with accurate office locations</p>
+                  <h3 className='font-semibold mb-1'>Microsoft-Optimized</h3>
+                  <p className='text-gray-600'>Built specifically for Microsoft employees with accurate campus and shuttle data</p>
                 </div>
               </div>
               <div className='flex items-start'>
                 <CheckCircle className='h-6 w-6 text-green-500 mr-3 mt-1' />
                 <div>
-                  <h3 className='font-semibold mb-1'>Free to Use</h3>
-                  <p className='text-gray-600'>No cost, no registration required - just enter your address and go</p>
+                  <h3 className='font-semibold mb-1'>Smart Filtering</h3>
+                  <p className='text-gray-600'>Set your preferences and see only areas that match your commute requirements</p>
                 </div>
               </div>
             </div>
@@ -198,12 +198,12 @@ export default function HomePage() {
 
         {/* CTA Section */}
         <div className='text-center'>
-          <h2 className='text-3xl font-bold text-gray-900 mb-4'>Ready to Find Your Perfect Commute?</h2>
-          <p className='text-xl text-gray-600 mb-8'>Start analyzing your commute in under 30 seconds</p>
+          <h2 className='text-3xl font-bold text-gray-900 mb-4'>Ready to Discover Your Ideal Location?</h2>
+          <p className='text-xl text-gray-600 mb-8'>Start exploring neighborhoods and transportation options in under 30 seconds</p>
           <Button asChild size='lg' className='text-lg px-8 py-6'>
-            <Link href='/commute-score' className='flex items-center'>
-              <Clock className='mr-2 h-5 w-5' />
-              Get Started Now
+            <Link href='/area-explorer' className='flex items-center'>
+              <MapPin className='mr-2 h-5 w-5' />
+              Start Exploring
               <ArrowRight className='ml-2 h-5 w-5' />
             </Link>
           </Button>
