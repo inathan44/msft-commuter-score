@@ -1,26 +1,34 @@
 'use client';
 
 import { useState } from 'react';
+import dynamic from 'next/dynamic';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Home, MapPin, Clock, Car, Bike, Train, Route, AlertCircle } from 'lucide-react';
-import Map from '@/components/Map';
 import { AddressAutocomplete } from '@/components/AddressAutocomplete';
 import { getMicrosoftBuildingOptions } from '@/app/helpers/search';
 import { microsoftBuildings } from '@/app/data/microsoftBuildings';
 import { type TransportMode } from '@/lib/routing-schema';
 import { normalizeRoutingResponse, convertToMapData } from '@/lib/routing-data-normalizer';
 import { MapData, MapRoute, MapPin as MapPinType } from '@/types/map';
-import { 
-  CommuteScore, 
-  calculateCommuteScore, 
-  getScoreColor, 
+import {
+  CommuteScore,
+  calculateCommuteScore,
+  getScoreColor,
   getScoreRingColor,
-  getTransportModeName 
+  getTransportModeName,
 } from '@/app/helpers/scoreHelpers';
+
+// Dynamically import Map component to prevent SSR issues
+const Map = dynamic(() => import('@/components/Map'), {
+  ssr: false,
+  loading: () => (
+    <div className='w-full h-full bg-gray-100 rounded-lg flex items-center justify-center'>Loading map...</div>
+  ),
+});
 
 const CircularScore = ({ score, size = 'md' }: { score: number; size?: 'sm' | 'md' | 'lg' }) => {
   const radius = size === 'sm' ? 20 : size === 'lg' ? 35 : 28;
@@ -96,13 +104,13 @@ export default function CommuteScorePage() {
   ): Promise<CommuteScore | null> => {
     console.log('Microsoft Connector routing called with:', {
       from: { lat: homeCoords.lat, lng: homeCoords.lng, address: homeAddress },
-      to: { lat: buildingCoords.lat, lng: buildingCoords.lng, building: selectedBuilding }
+      to: { lat: buildingCoords.lat, lng: buildingCoords.lng, building: selectedBuilding },
     });
-    
+
     // TODO: Implement Microsoft Connector routing logic here
     // This should integrate with internal Microsoft transportation systems
     // to provide actual connector route data, timing, and scoring
-    
+
     return null; // Return null for now until logic is implemented
   };
 
@@ -176,7 +184,7 @@ export default function CommuteScorePage() {
       if (allResults.length > 0) {
         const allRoutes: MapRoute[] = [];
         const scores: CommuteScore[] = [];
-        
+
         const pins: MapPinType[] = [
           {
             id: 'start',
@@ -217,18 +225,18 @@ export default function CommuteScorePage() {
             console.log(`Routes for ${result.mode}:`, mapDataForRoute.routes);
             // Add all routes from this mode to our collection
             allRoutes.push(...mapDataForRoute.routes);
-            
+
             // Calculate score for this route
             const route = normalizedData.route;
             const score = calculateCommuteScore(route.properties.time, route.properties.distance, result.mode);
-            
+
             scores.push({
               mode: result.mode,
               time: route.properties.time,
               distance: route.properties.distance,
               timeFormatted: route.properties.timeFormatted,
               distanceFormatted: route.properties.distanceFormatted,
-              score
+              score,
             });
           } else {
             console.error(`Failed to normalize route data for ${result.mode}:`, normalizedData);
@@ -325,7 +333,7 @@ export default function CommuteScorePage() {
                 </CardContent>
               </Card>
             </div>
-            
+
             {/* Score Section */}
             <div className='space-y-6'>
               <Card>
@@ -334,9 +342,7 @@ export default function CommuteScorePage() {
                     <Clock className='h-5 w-5 mr-2' />
                     Commute Scores
                   </CardTitle>
-                  <CardDescription>
-                    Analysis based on time, distance, and transport mode
-                  </CardDescription>
+                  <CardDescription>Analysis based on time, distance, and transport mode</CardDescription>
                 </CardHeader>
                 <CardContent className='space-y-4'>
                   {commuteScores.length > 0 ? (
@@ -344,7 +350,10 @@ export default function CommuteScorePage() {
                       {commuteScores
                         .sort((a, b) => b.score - a.score) // Sort by score, highest first
                         .map((scoreData) => (
-                          <div key={scoreData.mode} className='flex items-center justify-between p-3 rounded-lg bg-gray-50'>
+                          <div
+                            key={scoreData.mode}
+                            className='flex items-center justify-between p-3 rounded-lg bg-gray-50'
+                          >
                             <div className='flex items-center space-x-3'>
                               <div className='flex items-center space-x-2'>
                                 {scoreData.mode === 'drive' && <Car className='h-5 w-5 text-blue-600' />}
@@ -352,15 +361,19 @@ export default function CommuteScorePage() {
                                 {scoreData.mode === 'walk' && <Route className='h-5 w-5 text-green-600' />}
                                 {scoreData.mode === 'transit' && <Train className='h-5 w-5 text-purple-600' />}
                                 <div>
-                                  <h4 className='font-semibold text-sm capitalize'>{getTransportModeName(scoreData.mode)}</h4>
-                                  <p className='text-xs text-gray-600'>{scoreData.timeFormatted} • {scoreData.distanceFormatted}</p>
+                                  <h4 className='font-semibold text-sm capitalize'>
+                                    {getTransportModeName(scoreData.mode)}
+                                  </h4>
+                                  <p className='text-xs text-gray-600'>
+                                    {scoreData.timeFormatted} • {scoreData.distanceFormatted}
+                                  </p>
                                 </div>
                               </div>
                             </div>
                             <CircularScore score={scoreData.score} size='md' />
                           </div>
                         ))}
-                      
+
                       {/* Overall Best Score */}
                       {commuteScores.length > 0 && (
                         <div className='mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg'>
@@ -371,7 +384,7 @@ export default function CommuteScorePage() {
                                 {getTransportModeName(commuteScores[0]?.mode)} - {commuteScores[0]?.timeFormatted}
                               </p>
                             </div>
-                            <CircularScore score={Math.max(...commuteScores.map(s => s.score))} size='lg' />
+                            <CircularScore score={Math.max(...commuteScores.map((s) => s.score))} size='lg' />
                           </div>
                         </div>
                       )}

@@ -20,10 +20,7 @@ export function Navbar() {
   const navItems = [
     { href: '/area-explorer', label: 'Area Explorer' },
     { href: '/commute-score', label: 'Commute Score' },
-    ...(process.env.NODE_ENV === 'development' 
-      ? [{ href: '/playground', label: 'API Playground' }] 
-      : []
-    ),
+    ...(process.env.NODE_ENV === 'development' ? [{ href: '/playground', label: 'API Playground' }] : []),
   ];
 
   return (
@@ -65,11 +62,7 @@ export function Navbar() {
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-label='Toggle mobile menu'
         >
-          {isMobileMenuOpen ? (
-            <X className='h-5 w-5' />
-          ) : (
-            <Menu className='h-5 w-5' />
-          )}
+          {isMobileMenuOpen ? <X className='h-5 w-5' /> : <Menu className='h-5 w-5' />}
         </button>
       </div>
 

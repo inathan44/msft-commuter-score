@@ -13,14 +13,10 @@ export interface CommuteScore {
  * Calculate commute score based on time and distance
  * Score ranges from 0-100, with higher scores being better
  */
-export const calculateCommuteScore = (
-  timeInSeconds: number, 
-  distanceInMeters: number, 
-  mode: TransportMode
-): number => {
+export const calculateCommuteScore = (timeInSeconds: number, distanceInMeters: number, mode: TransportMode): number => {
   // Base scoring - lower time and reasonable distance = higher score
   let score = 100;
-  
+
   // Time penalty - anything over 30 minutes starts losing points rapidly
   const timeInMinutes = timeInSeconds / 60;
   if (timeInMinutes > 30) {
@@ -28,13 +24,13 @@ export const calculateCommuteScore = (
   } else if (timeInMinutes > 20) {
     score -= (timeInMinutes - 20) * 1; // -1 point per minute over 20
   }
-  
+
   // Distance penalty - very long distances lose points
   const distanceInKm = distanceInMeters / 1000;
   if (distanceInKm > 25) {
     score -= (distanceInKm - 25) * 1.5; // -1.5 points per km over 25
   }
-  
+
   // Mode-specific adjustments
   switch (mode) {
     case 'bike':
@@ -55,7 +51,7 @@ export const calculateCommuteScore = (
       score += 8;
       break;
   }
-  
+
   // Ensure score stays within 0-100 range
   return Math.max(0, Math.min(100, Math.round(score)));
 };
@@ -105,24 +101,24 @@ export const getTransportModeName = (mode: TransportMode): string => {
  */
 export const calculateOverallScore = (scores: CommuteScore[]): number => {
   if (scores.length === 0) return 0;
-  
+
   // Weight scores by mode preference (higher weight = more important for overall score)
   const modeWeights: Partial<Record<TransportMode, number>> = {
-    drive: 1.0,    // Standard weight
-    transit: 1.2,  // Slightly higher weight for environmental benefit
-    bike: 1.1,     // Slight bonus for health/environment
-    walk: 0.8,     // Lower weight since walking isn't practical for long distances
+    drive: 1.0, // Standard weight
+    transit: 1.2, // Slightly higher weight for environmental benefit
+    bike: 1.1, // Slight bonus for health/environment
+    walk: 0.8, // Lower weight since walking isn't practical for long distances
     // truck and taxi are not commonly used for commuting, so no weights
   };
-  
+
   let weightedSum = 0;
   let totalWeight = 0;
-  
-  scores.forEach(scoreData => {
+
+  scores.forEach((scoreData) => {
     const weight = modeWeights[scoreData.mode] || 1.0;
     weightedSum += scoreData.score * weight;
     totalWeight += weight;
   });
-  
+
   return Math.round(weightedSum / totalWeight);
 };

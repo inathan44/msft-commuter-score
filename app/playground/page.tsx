@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import dynamic from 'next/dynamic';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
@@ -18,8 +19,15 @@ import {
   getRouteCenter,
   calculateZoomLevel,
 } from '@/lib/routing-data-normalizer';
-import Map from '@/components/Map';
 import { MapData } from '@/types/map';
+
+// Dynamically import Map component to prevent SSR issues
+const Map = dynamic(() => import('@/components/Map'), {
+  ssr: false,
+  loading: () => (
+    <div className='w-full h-full bg-gray-100 rounded-lg flex items-center justify-center'>Loading map...</div>
+  ),
+});
 
 export default function PlaygroundPage() {
   const [startAddress, setStartAddress] = useState('123 Capitol Hill, Seattle, WA');

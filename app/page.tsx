@@ -1,18 +1,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { 
-  Home, 
-  MapPin, 
-  Route, 
-  BarChart3, 
-  Clock, 
-  Car, 
-  Bike, 
-  Train,
-  ArrowRight,
-  CheckCircle
-} from 'lucide-react';
+import { Home, MapPin, Route, BarChart3, Clock, Car, Bike, Train, ArrowRight, CheckCircle } from 'lucide-react';
 
 export default function HomePage() {
   return (
@@ -25,8 +14,8 @@ export default function HomePage() {
             <h1 className='text-5xl font-bold text-gray-900'>Microsoft Commute Score</h1>
           </div>
           <p className='text-xl text-gray-600 max-w-3xl mx-auto mb-8'>
-            Find your perfect home location with intelligent commute analysis to Microsoft offices. 
-            Get personalized scores based on travel time, distance, and transport options.
+            Find your perfect home location with intelligent commute analysis to Microsoft offices. Get personalized
+            scores based on travel time, distance, and transport options.
           </p>
           <div className='flex flex-col sm:flex-row gap-4 justify-center'>
             <Button asChild size='lg' className='text-lg px-8 py-6'>
@@ -56,8 +45,8 @@ export default function HomePage() {
             </CardHeader>
             <CardContent>
               <CardDescription className='text-base'>
-                Get intelligent commute scores (0-100) that factor in travel time, distance, 
-                and transport mode to help you make informed housing decisions.
+                Get intelligent commute scores (0-100) that factor in travel time, distance, and transport mode to help
+                you make informed housing decisions.
               </CardDescription>
             </CardContent>
           </Card>
@@ -71,8 +60,8 @@ export default function HomePage() {
             </CardHeader>
             <CardContent>
               <CardDescription className='text-base'>
-                Compare driving, biking, walking, and transit options with real-time routing 
-                data and interactive map visualization.
+                Compare driving, biking, walking, and transit options with real-time routing data and interactive map
+                visualization.
               </CardDescription>
             </CardContent>
           </Card>
@@ -86,8 +75,8 @@ export default function HomePage() {
             </CardHeader>
             <CardContent>
               <CardDescription className='text-base'>
-                Pre-loaded with all Microsoft office locations including Redmond campus, 
-                Bellevue, and Seattle offices for accurate commute planning.
+                Pre-loaded with all Microsoft office locations including Redmond campus, Bellevue, and Seattle offices
+                for accurate commute planning.
               </CardDescription>
             </CardContent>
           </Card>
@@ -210,9 +199,7 @@ export default function HomePage() {
         {/* CTA Section */}
         <div className='text-center'>
           <h2 className='text-3xl font-bold text-gray-900 mb-4'>Ready to Find Your Perfect Commute?</h2>
-          <p className='text-xl text-gray-600 mb-8'>
-            Start analyzing your commute in under 30 seconds
-          </p>
+          <p className='text-xl text-gray-600 mb-8'>Start analyzing your commute in under 30 seconds</p>
           <Button asChild size='lg' className='text-lg px-8 py-6'>
             <Link href='/commute-score' className='flex items-center'>
               <Clock className='mr-2 h-5 w-5' />
