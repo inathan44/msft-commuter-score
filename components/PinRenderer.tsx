@@ -15,7 +15,7 @@ const COLORS = {
     hover: '#0056b3',
   },
   radius: {
-    primary: '#bf4040',
+    primary: '#06b6d4',
     secondary: '#4060bf',
   },
   markers: {
@@ -89,10 +89,9 @@ const createPinPopup = (pin: MapPin): string => {
   switch (pin.type) {
     case 'connectorStop':
       specificInfo = `
-        <p style="margin: 4px 0;"><strong>Type:</strong> Transit Stop</p>
+        <p style="margin: 4px 0;"><strong>Type:</strong> Connector Stop</p>
         <p style="margin: 4px 0;"><strong>Description:</strong> ${pin.description}</p>
         <p style="margin: 4px 0;"><strong>Parking:</strong> ${pin.hasParking ? '✅ Available' : '❌ None'}</p>
-        <p style="margin: 4px 0;"><strong>MS Building:</strong> ${pin.isMSBuilding ? '✅ Yes' : '❌ No'}</p>
       `;
       break;
     case 'microsoftBuilding':

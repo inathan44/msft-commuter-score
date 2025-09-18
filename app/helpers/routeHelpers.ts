@@ -30,33 +30,47 @@ const createCustomIcon = (color: string, emoji: string) => {
 export const addRoute = (route: MapRoute, map: L.Map) => {
   const color = route.color || '#007bff';
 
-  L.geoJSON(route.geometry as GeoJsonObject, {
-    style: {
-      color,
-      weight: 4,
-      opacity: 0.8,
-    },
-    onEachFeature: (feature, layer) => {
-      layer.bindPopup(`
-        <div>
-          <h3 style="margin: 0 0 8px 0; font-weight: bold;">Route Information</h3>
-          <p style="margin: 4px 0;"><strong>Route:</strong> ${route.name}</p>
-          <p style="margin: 4px 0;"><strong>Type:</strong> Driving</p>
-          <p style="margin: 4px 0;"><strong>Distance:</strong> ${route.distance || '~5.5km'}</p>
-          <p style="margin: 4px 0;"><strong>Est. Time:</strong> ${route.estimatedTime || '8-10 minutes'}</p>
-          <p style="margin: 4px 0; font-size: 12px; color: #666;">Click anywhere on the route for details</p>
-        </div>
-      `);
+  console.log('Adding route:', route);
+  console.log('Route geometry:', route.geometry);
 
-      layer.on('mouseover', () => {
-        (layer as L.Path).setStyle({ color, weight: 6, opacity: 1.0 });
-      });
+  // Type check for LineString geometry
+  if (route.geometry.type === 'LineString') {
+    const lineString = route.geometry as { type: 'LineString'; coordinates: [number, number][] };
+    console.log('Route coordinates sample:', lineString.coordinates?.slice(0, 3));
+  }
 
-      layer.on('mouseout', () => {
-        (layer as L.Path).setStyle({ color, weight: 4, opacity: 0.8 });
-      });
-    },
-  }).addTo(map);
+  try {
+    L.geoJSON(route.geometry as GeoJsonObject, {
+      style: {
+        color,
+        weight: 4,
+        opacity: 0.8,
+      },
+      onEachFeature: (feature, layer) => {
+        layer.bindPopup(`
+          <div>
+            <h3 style="margin: 0 0 8px 0; font-weight: bold;">Route Information</h3>
+            <p style="margin: 4px 0;"><strong>Route:</strong> ${route.name}</p>
+            <p style="margin: 4px 0;"><strong>Type:</strong> Driving</p>
+            <p style="margin: 4px 0;"><strong>Distance:</strong> ${route.distance || '~5.5km'}</p>
+            <p style="margin: 4px 0;"><strong>Est. Time:</strong> ${route.estimatedTime || '8-10 minutes'}</p>
+            <p style="margin: 4px 0; font-size: 12px; color: #666;">Click anywhere on the route for details</p>
+          </div>
+        `);
+
+        layer.on('mouseover', () => {
+          (layer as L.Path).setStyle({ color, weight: 6, opacity: 1.0 });
+        });
+
+        layer.on('mouseout', () => {
+          (layer as L.Path).setStyle({ color, weight: 4, opacity: 0.8 });
+        });
+      },
+    }).addTo(map);
+  } catch (error) {
+    console.error('Error adding route to map:', error);
+    console.error('Problematic route geometry:', route.geometry);
+  }
 };
 
 export const addRouteMarker = (marker: RouteMarker, map: L.Map) => {

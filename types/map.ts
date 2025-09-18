@@ -33,6 +33,7 @@ export interface ConnectorStopPin extends BaseMapPin {
 export interface MicrosoftBuildingPin extends BaseMapPin {
   type: 'microsoftBuilding';
   buildingName: string;
+  logo?: string; // Optional logo URL or path
 }
 
 interface OtherPin extends BaseMapPin {

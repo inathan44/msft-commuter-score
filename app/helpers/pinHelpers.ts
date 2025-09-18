@@ -37,6 +37,11 @@ export const createPinIcon = (pin: MapPin): L.DivIcon => {
   };
 
   const getPinEmoji = (pin: MapPin): string => {
+    // Check if it's a Microsoft building with a logo
+    if (pin.type === 'microsoftBuilding' && 'logo' in pin && pin.logo) {
+      return `<img src="${pin.logo}" alt="Microsoft" style="width: 16px; height: 16px;" />`;
+    }
+
     switch (pin.type) {
       case 'connectorStop':
         return '🚌';
@@ -82,10 +87,17 @@ export const createPinPopupContent = (pin: MapPin): string => {
 
   if (pin.type === 'connectorStop') {
     color = pin.isMSBuilding ? '#8B5CF6' : '#3B82F6';
-    emoji = '🚌';
+    emoji = pin.isMSBuilding
+      ? `<img src="/microsoft-logo.svg" alt="Microsoft" style="width: 20px; height: 20px; vertical-align: middle;" />`
+      : '🚌';
   } else if (pin.type === 'microsoftBuilding') {
     color = '#059669';
-    emoji = '🏢';
+    // Check if this Microsoft building has a logo
+    if ('logo' in pin && pin.logo) {
+      emoji = `<img src="${pin.logo}" alt="Microsoft" style="width: 20px; height: 20px; vertical-align: middle;" />`;
+    } else {
+      emoji = '🏢';
+    }
   } else {
     color = '#6B7280';
     emoji = '📍';
@@ -102,13 +114,11 @@ export const createPinPopupContent = (pin: MapPin): string => {
   switch (pin.type) {
     case 'connectorStop':
       const parkingStatus = pin.hasParking ? '✅ Available' : '❌ None';
-      const msBuildingStatus = pin.isMSBuilding ? '✅ Yes' : '❌ No';
 
       specificInfo = `
-        <p style="margin: 4px 0;"><strong>Type:</strong> Transit Stop</p>
+        <p style="margin: 4px 0;"><strong>Type:</strong> Connector Stop</p>
         <p style="margin: 4px 0;"><strong>Description:</strong> ${pin.description}</p>
         <p style="margin: 4px 0;"><strong>Parking:</strong> ${parkingStatus}</p>
-        <p style="margin: 4px 0;"><strong>MS Building:</strong> ${msBuildingStatus}</p>
       `;
       break;
     case 'microsoftBuilding':
